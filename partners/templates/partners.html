@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-3">
+    <h1 class="text-center mb-4">Our Community</h1>
+    <div class="row">
+        {% for partner in partners %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ partner.logo }}" class="card-img-top" alt="{{ partner.name }}">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ partner.name }}</h5>
+                    <hr style="background-color: #e05206; border-color: #e05206;">
+                    <p class="card-text text-center">Contact: {{ partner.contact_number }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

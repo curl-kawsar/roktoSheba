@@ -1,0 +1,81 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}রক্তসেবা - মানবতার টানে, ভয় নেই রক্তদানে{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head> 
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="https://i.ibb.co/hf7bc6d/health-medical-center-Logo.png" alt="Logo" style="height: 40px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'donor_list' %}"><i class="fas fa-users"></i> Donors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blood_request_list' %}"><i class="fas fa-hand-holding-medical"></i> Requests</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'recent_receiver_list' %}"><i class="fas fa-tint"></i> Recent Receiver</a>
+                </li>
+                <a class="nav-link" href="{% url 'notifications' %}"><i class="fas fa-bell"></i> 
+                    Notifications <span class="badge badge-pill badge-danger">{{ notifications_count }}</span>
+                </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'post_list' %}"><i class="fas fa-pencil-alt"></i> Post</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'partners' %}"><i class="fas fa-handshake"></i> Community</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Register</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    {% comment %} <a class="nav-link" href="{% url 'developer' %}"><i class="fas fa-code"></i> Developer</a> {% endcomment %}
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'search_results' %}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search Blood Group" aria-label="Search" name="blood_group">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i> Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+Django
+django_crispy_forms
+python_dateutil
+Requests

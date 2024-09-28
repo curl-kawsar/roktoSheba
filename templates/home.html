@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .card {
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #333;
+    }
+    .card-text {
+        font-size: 2rem;
+        color: #007bff;
+    }
+    .jumbotron {
+        border-radius: 0.5rem;
+        background-color: #f8f9fa;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    .jumbotron h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+    .jumbotron p {
+        font-size: 1.25rem;
+        color: #555;
+    }
+    .card-section {
+        margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.125rem;
+    }
+    .card-content {
+        padding: 1.5rem;
+    }
+
+    .btn-gap {
+        margin-bottom: 1rem; /* Adds spacing between buttons on mobile devices */
+    }
+    @media (min-width: 576px) {
+        .btn-gap {
+            margin-bottom: 0; /* Removes spacing for larger screens */
+        }
+    }
+
+    .card-gap {
+        margin-bottom: 1.5rem; /* Adds spacing between cards on mobile devices */
+    }
+    @media (min-width: 576px) {
+        .card-gap {
+            margin-bottom: 0; /* Removes spacing for larger screens */
+        }
+    }
+
+    .fancy-card {
+        background: linear-gradient(135deg, #007bff, #00c6ff);;
+        color: white;
+    }
+    .fancy-card .card-title i {
+        margin-right: 0.5rem;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    .animated-text {
+        animation: fadeIn 3s ease-in-out;
+    }
+</style>
+
+<p class="text-center animated-text">রক্তসেবা - মানবতার টানে, ভয় নেই রক্তদানে</p>
+<div class="container mt-3">
+    <div class="row mb-4">
+        <div class="col-md-4 card-gap">
+            <div class="card shadow-sm fancy-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-white"><i class="fas fa-users"></i> Total Donors</h5>
+                    <p class="card-text display-4 text-white">{{ total_donors }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 card-gap">
+            <div class="card shadow-sm fancy-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-white"><i class="fas fa-hand-holding-heart"></i> Total Requests</h5>
+                    <p class="card-text display-4 text-white" >{{ total_requests }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="jumbotron text-center">
+    <h1 class="display-4">Welcome to the Blood Bank</h1>
+    <p class="lead">Your contribution can save lives. Join us in making a difference.</p>
+    <hr class="my-4">
+    <p>To become a donor or request blood, please use the links below.</p>
+    <div>
+        <a class="btn btn-primary btn-lg btn-gap " href="{% url 'donor_list' %}" role="button" >Find Donors</a>
+        <a class="btn btn-danger btn-lg btn-gap" href="{% url 'blood_request_list' %}" role="button">Request Blood</a>
+    </div>
+</div>
+
+<div class="row card-section">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body card-content">
+                <h2 class="card-title" style="color: darkgreen;">Why Donate Blood?</h2>
+                <p>Blood donation is a simple, safe, and quick process that can save lives. By donating blood, you are helping patients in need of transfusions due to surgeries, accidents, or medical conditions.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body card-content">
+                <h2 class="card-title" style="color: darkgreen;">How to Request Blood?</h2>
+                <p>If you or someone you know needs blood, you can easily request it through our platform. Simply fill out the request form, and we will connect you with available donors in your area.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+{% endblock %}

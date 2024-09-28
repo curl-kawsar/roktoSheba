@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .card {
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #333;
+    }
+    .card-text {
+        font-size: 2rem;
+        color: #007bff;
+    }
+    .jumbotron {
+        border-radius: 0.5rem;
+        background-color: #f8f9fa;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    .jumbotron h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+    .jumbotron p {
+        font-size: 1.25rem;
+        color: #555;
+    }
+    .card-section {
+        margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.125rem;
+    }
+    .card-content {
+        padding: 1.5rem;
+    }
+
+    .btn-gap {
+        margin-bottom: 1rem; /* Adds spacing between buttons on mobile devices */
+    }
+    @media (min-width: 576px) {
+        .btn-gap {
+            margin-bottom: 0; /* Removes spacing for larger screens */
+        }
+    }
+
+    .card-gap {
+        margin-bottom: 1.5rem; /* Adds spacing between cards on mobile devices */
+    }
+    @media (min-width: 576px) {
+        .card-gap {
+            margin-bottom: 0; /* Removes spacing for larger screens */
+        }
+    }
+
+    .fancy-card {
+        background: linear-gradient(135deg, #007bff, #00c6ff);;
+        color: white;
+    }
+    .fancy-card .card-title i {
+        margin-right: 0.5rem;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    .animated-text {
+        animation: fadeIn 3s ease-in-out;
+    }
+</style>
+
+{% comment %} <p class="text-center animated-text">রক্তসেবা - মানবতার টানে, ভয় নেই রক্তদানে</p> {% endcomment %}
+<div class="container mt-3">
+    <h1 class="text-center mb-4">Search Donors by Blood Group or Location</h1>
+    <h5 class="my-4">Date Format: Year / Month / Day</h5>
+    <form method="get" action="{% url 'search_results' %}" class="justify-content-center mb-4">
+        {{ form.as_p }}
+        <datalist id="location-list">
+            {% for location in form.fields.location.choices %}
+                <option value="{{ location.0 }}">{{ location.1 }}</option>
+            {% endfor %}
+        </datalist>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <h2 class="text-center mb-4">Results</h2>
+    {% if donors %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Blood Group</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Last Donated</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for donor in donors %}
+                    <tr>
+                        <td>{{ donor.name }}</td>
+                        <td>{{ donor.blood_group }}</td>
+                        <td>{{ donor.phone_number }}</td>
+                        <td>{{ donor.address }}</td>
+                        <td>{{ donor.last_donated_date|date:'Y-m-d' }}</td>
+                        <td>
+                            {% if user.is_authenticated %}
+                                {% if donor.is_eligible_to_donate %}
+                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#notifyModal{{ donor.id }}">Notify</button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="notifyModal{{ donor.id }}" tabindex="-1" role="dialog" aria-labelledby="notifyModalLabel{{ donor.id }}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="notifyModalLabel{{ donor.id }}">Notify Donor</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form method="post" action="{% url 'send_confirmation_sms' donor.id %}">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                        <!-- Add your form fields here -->
+                                                        <div class="form-group">
+                                                            <label for="patient_name">Patient Name</label>
+                                                            <input type="text" class="form-control" id="patient_name" name="patient_name" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="patient_condition">Patient Condition</label>
+                                                            <input type="text" class="form-control" id="patient_condition" name="patient_condition" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="blood_group">Blood Group</label>
+                                                            <input type="text" class="form-control" id="blood_group" name="blood_group" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="location">Location</label>
+                                                            <input type="text" class="form-control" id="location" name="location" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="number">Contact Number</label>
+                                                            <input type="text" class="form-control" id="number" name="number" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="reason">Reason for Donation</label>
+                                                            <input type="text" class="form-control" id="reason" name="reason" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Send SMS</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <span class="badge badge-danger">Not Eligible</span>
+                                {% endif %}
+                            {% else %}
+                                <div class="alert alert-warning" role="alert">
+                                    Please <a href="{% url 'login' %}">log in</a> to notify donors.
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center">No results found</p>
+    {% endif %}
+</div>
+
+{% comment %} <style>
+    .table-responsive td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (max-width: 768px) {
+        .table-responsive td {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .table-responsive td:last-child {
+            border-bottom: 1px solid #dee2e6;
+        }
+    }
+</style> {% endcomment %}
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Posts</h2>
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-img-container" style="position: relative; overflow: hidden; border-radius: 5px;">
+                        <img src="{{ post.photo }}" class="card-img-top" alt="{{ post.title }}" style="object-fit: cover; width: 100%; height: 200px;">
+                    </div>
+                    <div class="card-body" style="background-color: #f8f9fa;">
+                        <h5 class="card-title" style="font-size: 1.2rem; font-weight: bold;">{{ post.title }}</h5>
+                        <hr style="background-color: #e05206; border-color: #e05206;">
+                        <p class="card-text" style="font-size: 0.9rem; color: #6c757d;">{{ post.description|truncatewords:30 }}</p>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary btn-sm mt-2" style="background-color: #e05206; border-color: #e05206;" data-bs-toggle="modal" data-bs-target="#imageModal{{ post.id }}">
+                            View Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="imageModal{{ post.id }}" tabindex="-1" aria-labelledby="imageModalLabel{{ post.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            {% comment %} <h5 class="modal-title" id="imageModalLabel{{ post.id }}">{{ post.title }}</h5> {% endcomment %}
+                            {% comment %} <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> {% endcomment %}
+                        </div>
+                        <div class="modal-body">
+                            <img src="{{ post.photo }}" class="img-fluid" alt="{{ post.title }}">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+{% endblock %}
